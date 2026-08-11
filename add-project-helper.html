@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Project — Helper Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf7f2;
+    --paper-soft:#f2ede4;
+    --ink:#241f1a;
+    --ink-soft:#8b8378;
+    --line:rgba(36,31,26,0.12);
+    --accent:#4b5c40;
+    --accent-soft:#e3e8dc;
+    --card-shadow:0 30px 60px -30px rgba(36,31,26,0.18);
+    --danger:#a4483a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Inter', sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .serif{font-family:'Fraunces', serif;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 40px 100px;}
+
+  header{ padding:44px 0 8px; }
+  .brand{ font-family:'Fraunces', serif; font-size:20px; font-weight:500; }
+  .brand .tag{ font-family:'Inter',sans-serif; font-size:13px; color:var(--ink-soft); font-weight:400; margin-left:10px;}
+
+  .intro{
+    background:var(--paper-soft); border-radius:24px; padding:32px 36px; margin:28px 0 48px;
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;
+  }
+  .intro h1{
+    font-family:'Fraunces', serif; font-weight:500; font-size:26px; margin:0 0 6px; grid-column:1/-1;
+  }
+  .intro .step{ font-size:13.5px; color:var(--ink-soft); line-height:1.6; }
+  .intro .step b{ display:block; color:var(--ink); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px; font-weight:600;}
+
+  .layout{ display:grid; grid-template-columns:1fr 0.85fr; gap:48px; align-items:start; }
+
+  .panel{ background:var(--paper); }
+  .panel-title{ font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:18px; font-weight:600;}
+
+  .field{ margin-bottom:24px; }
+  .field label{ display:block; font-size:13px; color:var(--ink-soft); margin-bottom:9px; }
+  .field input[type=text], .field select, .field textarea{
+    width:100%; border:none; border-bottom:1px solid var(--line); background:transparent;
+    font-family:'Inter', sans-serif; font-size:16px; color:var(--ink); padding:11px 0; transition:border-color .2s;
+  }
+  .field input[type=text]:focus, .field select:focus, .field textarea:focus{ border-color:var(--accent); outline:none; }
+  .field textarea{ resize:vertical; min-height:90px; }
+  .field .hint{ font-size:12px; color:var(--ink-soft); margin-top:6px; }
+
+  .drop{
+    border:1.5px dashed var(--line); border-radius:16px; padding:22px; text-align:center; cursor:pointer;
+    transition:border-color .2s, background .2s;
+  }
+  .drop:hover, .drop.drag{ border-color:var(--accent); background:var(--accent-soft); }
+  .drop input{ display:none; }
+  .drop-label{ font-size:14px; color:var(--ink-soft); }
+  .drop-label strong{ color:var(--ink); }
+
+  .thumb-preview{
+    margin-top:14px; width:140px; aspect-ratio:1/1; border-radius:14px; overflow:hidden;
+    background:var(--paper-soft); position:relative; box-shadow:var(--card-shadow);
+  }
+  .thumb-preview img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .thumb-preview .fname{
+    position:absolute; bottom:0; left:0; right:0; background:rgba(36,31,26,0.7); color:var(--paper);
+    font-size:10px; padding:5px 8px; font-family:'IBM Plex Mono', monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+
+  .extra-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(90px,1fr)); gap:12px; margin-top:16px;
+  }
+  .extra-item{
+    position:relative; aspect-ratio:1/1; border-radius:12px; overflow:hidden; background:var(--paper-soft);
+    box-shadow:var(--card-shadow);
+  }
+  .extra-item img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .extra-item .remove{
+    position:absolute; top:6px; right:6px; width:22px; height:22px; border-radius:50%;
+    background:rgba(36,31,26,0.75); color:var(--paper); border:none; font-size:13px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  .extra-item .remove:hover{ background:var(--danger); }
+
+  .btn-row{ display:flex; gap:14px; margin-top:8px; flex-wrap:wrap; }
+  .btn{
+    font-family:'Inter', sans-serif; font-size:14.5px; border:none; border-radius:100px; padding:14px 26px;
+    cursor:pointer; transition:background .2s, transform .2s; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{ background:var(--ink); color:var(--paper); }
+  .btn-primary:hover{ background:var(--accent); }
+  .btn-ghost{ background:var(--paper-soft); color:var(--ink); }
+  .btn-ghost:hover{ background:var(--accent-soft); }
+  .btn:disabled{ opacity:0.45; cursor:not-allowed; }
+
+  /* right column: live gallery card preview + code output */
+  .sticky{ position:sticky; top:40px; }
+  .card-preview-shell{
+    background:var(--paper-soft); border-radius:24px; padding:32px; margin-bottom:28px;
+  }
+  .thumb{
+    position:relative; aspect-ratio:1/1; border-radius:22px; overflow:hidden; cursor:pointer;
+    box-shadow:var(--card-shadow); max-width:260px; margin:0 auto;
+  }
+  .thumb-image{ position:absolute; inset:0; background:var(--paper); }
+  .thumb-image img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .thumb-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:12px; color:var(--ink-soft); text-align:center; padding:20px;
+  }
+  .thumb-overlay{
+    position:absolute; inset:0; background:rgba(36,31,26,0.5); opacity:0; transition:opacity .3s ease;
+    display:flex; align-items:flex-end; padding:20px;
+  }
+  .thumb:hover .thumb-overlay{ opacity:1; }
+  .thumb-overlay .cat{ font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(250,247,242,0.75); margin-bottom:4px; }
+  .thumb-overlay h4{ font-family:'Fraunces', serif; font-weight:500; font-size:17px; color:var(--paper); margin:0; }
+  .preview-caption{ text-align:center; font-size:12.5px; color:var(--ink-soft); margin-top:16px; }
+
+  .code-panel{
+    background:#1e1c18; border-radius:24px; padding:26px 28px; color:#e9e5da;
+  }
+  .code-panel textarea{
+    width:100%; background:transparent; border:none; color:#e9e5da; font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; line-height:1.7; resize:vertical; min-height:220px; outline:none;
+  }
+  .code-copy-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .code-copy-row span{ font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#9a9385; }
+  .copy-btn{
+    background:#33302a; color:#e9e5da; border:none; border-radius:100px; padding:9px 18px; font-size:12.5px;
+    cursor:pointer; transition:background .2s;
+  }
+  .copy-btn:hover{ background:#454138; }
+  .copy-btn.copied{ background:var(--accent); color:var(--paper); }
+
+  /* slideshow modal */
+  .modal-scrim{
+    position:fixed; inset:0; background:rgba(20,17,14,0.82); z-index:200;
+    display:flex; align-items:center; justify-content:center; padding:32px;
+    opacity:0; visibility:hidden; transition:opacity .3s ease, visibility .3s;
+  }
+  .modal-scrim.open{ opacity:1; visibility:visible; }
+  .modal{
+    background:var(--paper); border-radius:26px;
+    width:min(94vw, 1600px); max-height:min(90vh, 920px);
+    display:grid; grid-template-columns:1fr 360px; overflow:hidden;
+    transform:scale(0.96); transition:transform .3s ease;
+  }
+  .modal-scrim.open .modal{ transform:scale(1); }
+  .modal-visual{ position:relative; background:var(--paper-soft); aspect-ratio:4/3; align-self:center; overflow:hidden; }
+  .modal-visual img{ width:100%; height:100%; object-fit:cover; display:block; animation:slideIn .45s cubic-bezier(.22,.61,.36,1); }
+  .modal-visual iframe{ animation:slideIn .45s cubic-bezier(.22,.61,.36,1); }
+  @keyframes slideIn{
+    from{ opacity:0; transform:translateX(calc(var(--dir, 0) * 26px)) scale(1.015); }
+    to{ opacity:1; transform:translateX(0) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .modal-scrim, .modal, .modal-visual img, .modal-visual iframe{ transition:none !important; animation:none !important; }
+  }
+  .modal-nav{
+    position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%;
+    background:rgba(250,247,242,0.85); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .2s;
+  }
+  .modal-nav:hover{ background:var(--paper); }
+  .modal-prev{ left:16px; } .modal-next{ right:16px; }
+  .modal-dots{ position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:7px; }
+  .modal-dots span{ width:6px; height:6px; border-radius:50%; background:rgba(250,247,242,0.55); }
+  .modal-dots span.active{ background:var(--paper); }
+  .modal-info{ padding:34px 30px; display:flex; flex-direction:column; overflow-y:auto; }
+  .modal-info .cat{ font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:12px; }
+  .modal-info h3{ font-family:'Fraunces', serif; font-weight:500; font-size:24px; margin:0 0 16px; line-height:1.12; }
+  .modal-info p{ font-size:14.5px; line-height:1.7; color:var(--ink-soft); margin:0; white-space:pre-wrap; }
+  .modal-close{
+    position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:50%; border:none;
+    background:rgba(250,247,242,0.85); cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;
+    z-index:2;
+  }
+  .modal-close:hover{ background:var(--paper); }
+  @media (max-width:760px){
+    .modal{ grid-template-columns:1fr; max-height:92vh; width:96vw; }
+    .modal-visual{ aspect-ratio:4/3; }
+  }
+
+  @media (max-width:960px){
+    .layout{ grid-template-columns:1fr; }
+    .sticky{ position:static; }
+    .intro{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand">Rocket Moon <span class="tag">— Add Project helper (internal tool, not part of the public site)</span></div>
+  </header>
+
+  <div class="intro">
+    <h1>Add a project in three steps</h1>
+    <div class="step"><b>1. Fill the form</b>Title, category, thumbnail, extra images, and a short brief. Everything updates live on the right.</div>
+    <div class="step"><b>2. Copy the code</b>Click "Generate code," then "Copy" — this is one entry for your projects list.</div>
+    <div class="step"><b>3. Move the image files</b>Copy the actual image files into your site's <span class="mono">/images</span> folder — keep each file's original name exactly as shown under its preview below. Don't rename them.</div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="panel-title">Project details</div>
+
+      <div class="field">
+        <label for="title">1. Project title</label>
+        <input type="text" id="title" placeholder="e.g. Trade Show Activation Arch">
+      </div>
+
+      <div class="field">
+        <label for="category">2. Project type</label>
+        <select id="category">
+          <option value="">Select a category</option>
+          <option>3D Event Design</option>
+          <option>3D Hardsurface Modelling</option>
+          <option>Motion Graphics</option>
+          <option>Content Creation</option>
+          <option>Consultation</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>3. Project thumbnail</label>
+        <div class="hint" style="margin-bottom:10px;">The single image shown in the gallery grid.</div>
+        <div class="drop" id="thumbDrop">
+          <input type="file" id="thumbInput" accept="image/*">
+          <div class="drop-label"><strong>Click to choose</strong> a thumbnail image</div>
+        </div>
+        <div id="thumbPreviewWrap"></div>
+      </div>
+
+      <div class="field">
+        <label>4. Extra images <span class="hint" style="display:inline;">(for the slideshow — you can select several at once)</span></label>
+        <div class="drop" id="extraDrop">
+          <input type="file" id="extraInput" accept="image/*" multiple>
+          <div class="drop-label"><strong>Click to choose</strong> extra images</div>
+        </div>
+        <div class="extra-grid" id="extraGrid"></div>
+      </div>
+
+      <div class="field">
+        <label for="videoUrl">Project video <span class="hint" style="display:inline;">(optional — paste a YouTube or Vimeo <em>embed</em> link, not the regular watch/share link)</span></label>
+        <input type="text" id="videoUrl" placeholder="e.g. https://player.vimeo.com/video/123456789">
+        <div class="hint">On Vimeo: Share → Embed → copy the URL inside the src="". On YouTube: Share → Embed → same idea. When set, this plays as the first slide.</div>
+      </div>
+
+      <div class="field">
+        <label for="brief">5. Project brief / description</label>
+        <textarea id="brief" placeholder="A few sentences on the project — brief, approach, outcome. This shows alongside the images in the slideshow."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="generateBtn">Generate code</button>
+        <button class="btn btn-ghost" id="previewBtn">Preview slideshow</button>
+      </div>
+      <div class="hint" style="margin-top:12px;">The generated code defaults to <span class="mono">featured: false</span>. Change it to <span class="mono">true</span> in the pasted code if you want this project to also appear on the homepage "Work" section.</div>
+    </div>
+
+    <div class="sticky">
+      <div class="card-preview-shell">
+        <div class="panel-title" style="text-align:center;">How it will look in the gallery</div>
+        <div class="thumb" id="cardPreview">
+          <div class="thumb-image" id="cardImage"><div class="thumb-placeholder">Thumbnail preview appears here</div></div>
+          <div class="thumb-overlay">
+            <div>
+              <div class="cat" id="cardCat">Category</div>
+              <h4 id="cardTitle">Project title</h4>
+            </div>
+          </div>
+        </div>
+        <div class="preview-caption">Hover to preview the darken effect. Click to preview the slideshow.</div>
+      </div>
+
+      <div class="code-panel">
+        <div class="code-copy-row">
+          <span>Code for projects-data.js</span>
+          <button class="copy-btn" id="copyBtn">Copy</button>
+        </div>
+        <textarea id="codeOutput" readonly placeholder="Fill the form and click &quot;Generate code&quot; — the entry will appear here, ready to paste."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- slideshow modal -->
+<div class="modal-scrim" id="modalScrim">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-visual" id="modalVisual">
+      <button class="modal-nav modal-prev" id="modalPrev">‹</button>
+      <button class="modal-nav modal-next" id="modalNext">›</button>
+      <div class="modal-dots" id="modalDots"></div>
+    </div>
+    <div class="modal-info">
+      <div class="cat" id="modalCat">Category</div>
+      <h3 id="modalTitle">Project title</h3>
+      <p id="modalBrief">Project brief will appear here.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  let thumbFile = null;
+  let extraFiles = []; // {file, url}
+  let slideIndex = 0;
+
+  const titleEl = document.getElementById('title');
+  const categoryEl = document.getElementById('category');
+  const briefEl = document.getElementById('brief');
+  const thumbInput = document.getElementById('thumbInput');
+  const thumbDrop = document.getElementById('thumbDrop');
+  const thumbPreviewWrap = document.getElementById('thumbPreviewWrap');
+  const extraInput = document.getElementById('extraInput');
+  const extraDrop = document.getElementById('extraDrop');
+  const extraGrid = document.getElementById('extraGrid');
+
+  const cardImage = document.getElementById('cardImage');
+  const cardCat = document.getElementById('cardCat');
+  const cardTitle = document.getElementById('cardTitle');
+  const cardPreview = document.getElementById('cardPreview');
+
+  thumbDrop.addEventListener('click', () => thumbInput.click());
+  extraDrop.addEventListener('click', () => extraInput.click());
+
+  function slugify(str){
+    return str.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'untitled-project';
+  }
+
+  thumbInput.addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if(!f) return;
+    thumbFile = f;
+    const url = URL.createObjectURL(f);
+    thumbPreviewWrap.innerHTML = `<div class="thumb-preview"><img src="${url}"><div class="fname mono">${f.name}</div></div>`;
+    updateCardPreview();
+  });
+
+  extraInput.addEventListener('change', (e) => {
+    Array.from(e.target.files).forEach(f => {
+      extraFiles.push({ file:f, url:URL.createObjectURL(f) });
+    });
+    renderExtraGrid();
+    extraInput.value = '';
+  });
+
+  function renderExtraGrid(){
+    extraGrid.innerHTML = '';
+    extraFiles.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'extra-item';
+      div.innerHTML = `<img src="${item.url}"><button class="remove" data-i="${i}">✕</button>`;
+      extraGrid.appendChild(div);
+    });
+    extraGrid.querySelectorAll('.remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        extraFiles.splice(parseInt(btn.dataset.i), 1);
+        renderExtraGrid();
+      });
+    });
+  }
+
+  function updateCardPreview(){
+    cardCat.textContent = categoryEl.value || 'Category';
+    cardTitle.textContent = titleEl.value || 'Project title';
+    if(thumbFile){
+      cardImage.innerHTML = `<img src="${URL.createObjectURL(thumbFile)}">`;
+    }
+  }
+  [titleEl, categoryEl].forEach(el => el.addEventListener('input', updateCardPreview));
+
+  function allSlides(){
+    const slides = [];
+    const video = document.getElementById('videoUrl').value.trim();
+    if(video) slides.push({ type:'video', src: video });
+    if(thumbFile) slides.push({ type:'image', src: URL.createObjectURL(thumbFile) });
+    extraFiles.forEach(item => slides.push({ type:'image', src: item.url }));
+    return slides;
+  }
+
+  // --- slideshow modal ---
+  const modalScrim = document.getElementById('modalScrim');
+  const modalVisual = document.getElementById('modalVisual');
+  const modalPrev = document.getElementById('modalPrev');
+  const modalNext = document.getElementById('modalNext');
+  const modalDots = document.getElementById('modalDots');
+  const modalCat = document.getElementById('modalCat');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBrief = document.getElementById('modalBrief');
+  const modalClose = document.getElementById('modalClose');
+
+  function openModal(){
+    const slides = allSlides();
+    if(slides.length === 0){ alert('Add a thumbnail or at least one extra image first.'); return; }
+    slideIndex = 0;
+    modalCat.textContent = categoryEl.value || 'Category';
+    modalTitle.textContent = titleEl.value || 'Project title';
+    modalBrief.textContent = briefEl.value || 'Add a project brief to see it here.';
+    renderSlide();
+    modalScrim.classList.add('open');
+  }
+  function closeModal(){
+    modalScrim.classList.remove('open');
+    modalVisual.querySelectorAll('iframe').forEach(el => el.remove());
+  }
+
+  function renderSlide(dir){
+    const slides = allSlides();
+    modalVisual.querySelectorAll('img, iframe').forEach(el => el.remove());
+    const slide = slides[slideIndex];
+    let el;
+    if(slide.type === 'video'){
+      el = document.createElement('iframe');
+      el.src = slide.src;
+      el.allow = "autoplay; fullscreen; picture-in-picture";
+      el.allowFullscreen = true;
+      el.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:none;';
+    } else {
+      el = document.createElement('img');
+      el.src = slide.src;
+    }
+    el.style.setProperty('--dir', dir || 0);
+    modalVisual.insertBefore(el, modalVisual.firstChild);
+    modalDots.innerHTML = slides.map((_, i) => `<span class="${i===slideIndex?'active':''}"></span>`).join('');
+  }
+  function nextSlide(){ const s = allSlides(); slideIndex = (slideIndex+1) % s.length; renderSlide(1); }
+  function prevSlide(){ const s = allSlides(); slideIndex = (slideIndex-1+s.length) % s.length; renderSlide(-1); }
+
+  cardPreview.addEventListener('click', openModal);
+  document.getElementById('previewBtn').addEventListener('click', openModal);
+  modalClose.addEventListener('click', closeModal);
+  modalScrim.addEventListener('click', (e) => { if(e.target === modalScrim) closeModal(); });
+  modalNext.addEventListener('click', nextSlide);
+  modalPrev.addEventListener('click', prevSlide);
+  document.addEventListener('keydown', (e) => {
+    if(!modalScrim.classList.contains('open')) return;
+    if(e.key === 'Escape') closeModal();
+    if(e.key === 'ArrowRight') nextSlide();
+    if(e.key === 'ArrowLeft') prevSlide();
+  });
+
+  // --- code generation ---
+  const codeOutput = document.getElementById('codeOutput');
+  const copyBtn = document.getElementById('copyBtn');
+
+  document.getElementById('generateBtn').addEventListener('click', () => {
+    const title = titleEl.value.trim() || 'Untitled Project';
+    const category = categoryEl.value || 'Uncategorized';
+    const slug = slugify(title);
+    const video = document.getElementById('videoUrl').value.trim();
+    const CATEGORY_FOLDERS = {
+      '3D Event Design': 'images/3d-event-design-gallery',
+      '3D Hardsurface Modelling': 'images/3d-hardsurface-gallery',
+      'Motion Graphics': 'images/motion-graphics-gallery',
+      'Content Creation': 'images/content-creation-gallery'
+    };
+    const imgFolder = CATEGORY_FOLDERS[category] || 'images/uncategorized';
+    const thumbName = thumbFile ? `${imgFolder}/${thumbFile.name}` : `${imgFolder}/REPLACE-thumbnail.jpg`;
+    const extraNames = extraFiles.length
+      ? extraFiles.map((item) => `"${imgFolder}/${item.file.name}"`).join(',\n      ')
+      : `"${imgFolder}/REPLACE-extra-1.jpg"`;
+    const brief = briefEl.value.trim() || 'Add a project brief here.';
+
+    const code = `{
+  slug: "${slug}",
+  title: "${title.replace(/"/g,'\\"')}",
+  category: "${category}",
+  thumbnail: "${thumbName}",
+  images: [
+      ${extraNames}
+  ],
+  video: ${video ? `"${video.replace(/"/g,'\\"')}"` : 'null'},
+  brief: "${brief.replace(/"/g,'\\"').replace(/\n/g,'\\n')}",
+  featured: false,
+  placeholderGradient: null
+},`;
+    codeOutput.value = code;
+    copyBtn.classList.remove('copied');
+    copyBtn.textContent = 'Copy';
+  });
+
+  copyBtn.addEventListener('click', () => {
+    if(!codeOutput.value){ return; }
+    const finish = () => {
+      copyBtn.textContent = 'Copied!';
+      copyBtn.classList.add('copied');
+      setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 1800);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(codeOutput.value).then(finish).catch(() => {
+        codeOutput.select(); document.execCommand('copy'); finish();
+      });
+    } else {
+      codeOutput.select(); document.execCommand('copy'); finish();
+    }
+  });
+</script>
+</body>
+</html>

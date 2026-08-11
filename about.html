@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Rocket Moon</title>
+<meta name="description" content="About Rocket Moon — a technical 3D and motion studio. This page is coming soon.">
+<link rel="icon" type="image/svg+xml" href="images/icon/rocketmoon-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf7f2;
+    --paper-soft:#f2ede4;
+    --ink:#241f1a;
+    --ink-soft:#8b8378;
+    --line:rgba(36,31,26,0.12);
+    --accent:#4b5c40;
+    --accent-soft:#e3e8dc;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Inter', sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent); color:var(--paper);}
+  a{color:inherit;}
+  .serif-i{font-family:'Fraunces', serif; font-style:italic; font-weight:400;}
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 40px;}
+  .eyebrow{ font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); font-weight:500;}
+
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(250,247,242,0.82); backdrop-filter:blur(8px);
+  }
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; height:104px; }
+  .brand{ font-family:'Fraunces', serif; font-size:20px; font-weight:500; letter-spacing:0.01em; text-decoration:none; color:var(--ink); display:inline-flex; align-items:center;}
+  .brand-logo{ height:60px; width:auto; display:block; }
+  .footer-brand{ display:flex; align-items:center; gap:10px; }
+  .footer-icon{ height:20px; width:auto; display:block; }
+  .footer-tagline{ font-size:13px; color:var(--ink-soft); }
+  nav ul{list-style:none; display:flex; align-items:center; gap:10px; margin:0; padding:0;}
+  nav li{ display:flex; align-items:center; position:relative;}
+  nav a{
+    text-decoration:none; font-size:14px; color:var(--ink-soft); transition:color .2s, background .25s ease;
+    display:inline-flex; align-items:center; gap:6px; line-height:1;
+    position:relative; z-index:1; padding:13px 20px; border-radius:12px;
+  }
+  nav a:hover{color:var(--ink);}
+  nav a::before{
+    content:""; position:absolute; inset:0; border-radius:12px; background:var(--paper-soft);
+    opacity:0; transform:scale(0.9); transition:opacity .25s ease, transform .25s ease; z-index:-1;
+  }
+  nav a:hover::before, nav a:focus-visible::before{ opacity:1; transform:scale(1); }
+  .nav-cta{
+    font-size:14px; background:var(--ink); color:var(--paper); text-decoration:none;
+    padding:11px 22px; border-radius:100px; transition:background .2s;
+  }
+  .nav-cta:hover{background:var(--accent);}
+  .has-mega svg{width:10px; height:10px; transition:transform .2s;}
+  nav li:hover .has-mega svg, nav li:focus-within .has-mega svg{transform:rotate(180deg);}
+  .mega-menu{
+    position:fixed; left:0; right:0; top:104px;
+    background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    box-shadow:0 40px 60px -40px rgba(36,31,26,0.15);
+    opacity:0; visibility:hidden; transform:translateY(-8px);
+    transition:opacity .25s ease, transform .25s ease, visibility .25s;
+    z-index:40;
+  }
+  nav li:hover .mega-menu, nav li:focus-within .mega-menu{
+    opacity:1; visibility:visible; transform:translateY(0);
+  }
+  .mega-inner{
+    max-width:1180px; margin:0 auto; padding:48px 40px;
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:36px;
+  }
+  .mega-item{ text-decoration:none; display:block; padding-right:20px;}
+  .mega-item .mega-eyebrow{ font-size:11px; letter-spacing:0.1em; color:var(--ink-soft); text-transform:uppercase; margin-bottom:10px;}
+  .mega-item h4{
+    font-family:'Fraunces', serif; font-weight:500; font-size:21px; margin:0 0 10px; color:var(--ink);
+    transition:color .2s;
+  }
+  .mega-item:hover h4{color:var(--accent);}
+  .mega-item p{ font-size:13.5px; line-height:1.55; color:var(--ink-soft); margin:0 0 14px;}
+  .mega-item .mega-arrow{ font-size:13px; color:var(--ink); border-bottom:1px solid var(--line);}
+  .mega-item:hover .mega-arrow{border-color:var(--ink);}
+  @media (max-width:900px){ .mega-menu{display:none;} nav ul{display:none;} }
+
+  .stay-tuned{
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:160px 40px 100px;
+  }
+  .stay-tuned .eyebrow{ margin-bottom:22px; }
+  .stay-tuned h1{
+    font-family:'Fraunces', serif; font-weight:500; font-size:clamp(38px,6vw,64px);
+    line-height:1.05; letter-spacing:-0.015em; margin:0 0 20px;
+  }
+  .stay-tuned p{ font-size:17px; line-height:1.6; color:var(--ink-soft); max-width:480px; margin:0 0 36px;}
+
+  footer{padding:32px 0; border-top:1px solid var(--line);}
+  .footer-row{display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--ink-soft); flex-wrap:wrap; gap:16px;}
+  .footer-row a{text-decoration:none;}
+  .footer-row a:hover{color:var(--ink);}
+  .footer-links{display:flex; gap:26px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand"><img src="images/logo/rocketmoon-logo.svg" alt="Rocket Moon" class="brand-logo"></a>
+    <nav>
+      <ul>
+        <li><a href="index.html#about">What We Do</a></li>
+        <li>
+          <a href="index.html#services" class="has-mega">Services
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </a>
+          <div class="mega-menu">
+            <div class="mega-inner">
+              <a href="gallery-event-design.html" class="mega-item">
+                <div class="mega-eyebrow">Gallery</div>
+                <h4>3D Event Design</h4>
+                <p>Booths, arches, backdrops & stage structures.</p>
+                <span class="mega-arrow">View gallery →</span>
+              </a>
+              <a href="gallery-hardsurface.html" class="mega-item">
+                <div class="mega-eyebrow">Gallery</div>
+                <h4>3D Hardsurface Modelling</h4>
+                <p>Game-ready weapons, vehicles & environment kits.</p>
+                <span class="mega-arrow">View gallery →</span>
+              </a>
+              <a href="gallery-motion-graphics.html" class="mega-item">
+                <div class="mega-eyebrow">Gallery</div>
+                <h4>Motion Graphics</h4>
+                <p>Animated infographics, teasers & vector animation.</p>
+                <span class="mega-arrow">View gallery →</span>
+              </a>
+              <a href="gallery-content-creation.html" class="mega-item">
+                <div class="mega-eyebrow">Gallery</div>
+                <h4>Content Creation</h4>
+                <p>Brand, key art & social content.</p>
+                <span class="mega-arrow">View gallery →</span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="index.html#contact" class="nav-cta">Start a project</a>
+  </div>
+</header>
+
+<section class="stay-tuned">
+  <div class="eyebrow">About Us</div>
+  <h1>Stay tuned, <span class="serif-i">we're working on this page.</span></h1>
+  <p>We're putting together the story behind Rocket Moon. Check back soon.</p>
+  <a href="index.html" class="nav-cta" style="padding:14px 28px;">Back to home</a>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="footer-brand">
+      <img src="images/icon/rocketmoon-icon.svg" alt="" class="footer-icon">
+      <span class="footer-tagline">Rocket Moon Creative Solutions</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html#about">What We Do</a><a href="index.html#services">Services</a><a href="index.html#work">Work</a><a href="about.html">About Us</a><a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

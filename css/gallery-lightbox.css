@@ -1,0 +1,87 @@
+/*
+  gallery-lightbox.css
+  ------------------------------------------------------------
+  Shared styles for project grids + the slideshow modal.
+  Expects these CSS variables to already be defined on the page:
+  --paper, --paper-soft, --ink, --ink-soft, --card-shadow
+*/
+
+.thumb-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;
+}
+.thumb{
+  position:relative; aspect-ratio:1/1; border-radius:26px; overflow:hidden; cursor:pointer;
+  box-shadow:var(--card-shadow);
+}
+.thumb-media{
+  position:absolute; inset:0; background-size:cover; background-position:center; transition:transform .5s ease;
+}
+.thumb:hover .thumb-media{ transform:scale(1.04); }
+.thumb-overlay{
+  position:absolute; inset:0; background:rgba(36,31,26,0.46);
+  opacity:0; transition:opacity .35s ease;
+  display:flex; align-items:flex-end; padding:28px;
+}
+.thumb:hover .thumb-overlay, .thumb:focus-visible .thumb-overlay{ opacity:1; }
+.thumb-info{
+  transform:translateY(10px); opacity:0; transition:transform .35s ease .05s, opacity .35s ease .05s;
+}
+.thumb:hover .thumb-info, .thumb:focus-visible .thumb-info{ transform:translateY(0); opacity:1; }
+.thumb-info .cat{ font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(250,247,242,0.75); margin-bottom:6px; }
+.thumb-info h3{ font-family:'Fraunces', serif; font-weight:500; font-size:21px; color:var(--paper); margin:0; letter-spacing:-0.005em; }
+
+@media (max-width:900px){ .thumb-grid{ grid-template-columns:1fr 1fr; } }
+@media (max-width:560px){ .thumb-grid{ grid-template-columns:1fr; } }
+
+/* slideshow modal */
+.modal-scrim{
+  position:fixed; inset:0; background:rgba(20,17,14,0.82); z-index:200;
+  display:flex; align-items:center; justify-content:center; padding:32px;
+  opacity:0; visibility:hidden; transition:opacity .3s ease, visibility .3s;
+}
+.modal-scrim.open{ opacity:1; visibility:visible; }
+.modal{
+  background:var(--paper); border-radius:26px;
+  width:min(94vw, 1600px); max-height:min(90vh, 920px);
+  display:grid; grid-template-columns:1fr 360px; overflow:hidden;
+  transform:scale(0.96); transition:transform .3s ease;
+}
+.modal-scrim.open .modal{ transform:scale(1); }
+.modal-visual{ position:relative; background:var(--paper-soft); aspect-ratio:4/3; align-self:center; overflow:hidden; }
+.modal-visual .slide-media{ position:absolute; inset:0; background-size:cover; background-position:center; }
+.modal-visual iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+.slide-media, .modal-visual iframe{
+  animation:slideIn .45s cubic-bezier(.22,.61,.36,1);
+}
+@keyframes slideIn{
+  from{ opacity:0; transform:translateX(calc(var(--dir, 0) * 26px)) scale(1.015); }
+  to{ opacity:1; transform:translateX(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce){
+  .modal-scrim, .modal, .slide-media, .modal-visual iframe{ transition:none !important; animation:none !important; }
+}
+.modal-nav{
+  position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%;
+  background:rgba(250,247,242,0.85); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:background .2s; z-index:2;
+}
+.modal-nav:hover{ background:var(--paper); }
+.modal-prev{ left:16px; } .modal-next{ right:16px; }
+.modal-dots{ position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:7px; z-index:2; }
+.modal-dots span{ width:6px; height:6px; border-radius:50%; background:rgba(250,247,242,0.55); }
+.modal-dots span.active{ background:var(--paper); }
+.modal-info{ padding:34px 30px; display:flex; flex-direction:column; overflow-y:auto; }
+.modal-info .cat{ font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:12px; }
+.modal-info h3{ font-family:'Fraunces', serif; font-weight:500; font-size:24px; margin:0 0 16px; line-height:1.12; }
+.modal-info p{ font-size:14.5px; line-height:1.7; color:var(--ink-soft); margin:0; white-space:pre-wrap; }
+.modal-close{
+  position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:50%; border:none;
+  background:rgba(250,247,242,0.85); cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;
+  z-index:3;
+}
+.modal-close:hover{ background:var(--paper); }
+
+@media (max-width:760px){
+  .modal{ grid-template-columns:1fr; max-height:92vh; width:96vw; }
+  .modal-visual{ aspect-ratio:4/3; }
+}

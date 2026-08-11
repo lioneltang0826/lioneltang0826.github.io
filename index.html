@@ -1,45 +1,851 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rocket Moon — Creative Solutions</title>
+<meta name="description" content="Rocket Moon is a technical 3D and motion studio. We design event structures, game-ready hardsurface assets, motion graphics, and brand content. Based in Malaysia, working with teams everywhere.">
+<link rel="icon" type="image/svg+xml" href="images/icon/rocketmoon-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/gallery-lightbox.css">
+<style>
+  :root{
+    --paper:#faf7f2;
+    --paper-soft:#f2ede4;
+    --ink:#241f1a;
+    --ink-soft:#8b8378;
+    --line:rgba(36,31,26,0.12);
+    --accent:#4b5c40;
+    --accent-soft:#e3e8dc;
+    --card-shadow:0 30px 60px -30px rgba(36,31,26,0.18);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Inter', sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent); color:var(--paper);}
+  a{color:inherit;}
+  .serif{font-family:'Fraunces', serif;}
+  .serif-i{font-family:'Fraunces', serif; font-style:italic; font-weight:400;}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline:2px solid var(--accent); outline-offset:3px;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 40px;}
+  .eyebrow{
+    font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft);
+    font-weight:500;
+  }
 
-    <title>Your Name | Portfolio of Rocketmoon</title>
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
 
-    <link rel="stylesheet" href="style.css">
+  /* header */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(250,247,242,0.82); backdrop-filter:blur(8px);
+  }
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; height:104px; }
+  .brand{ font-family:'Fraunces', serif; font-size:20px; font-weight:500; letter-spacing:0.01em; display:inline-flex; align-items:center;}
+  .brand-logo{ height:64px; width:auto; display:block; }
+  .footer-brand{ display:flex; align-items:center; gap:10px; }
+  .footer-icon{ height:22px; width:auto; display:block; }
+  .footer-tagline{ font-size:13px; color:var(--ink-soft); }
+  nav ul{list-style:none; display:flex; align-items:center; gap:10px; margin:0; padding:0;}
+  nav li{ display:flex; align-items:center; }
+  nav a{
+    text-decoration:none; font-size:14px; color:var(--ink-soft); transition:color .2s, background .25s ease;
+    display:inline-flex; align-items:center; gap:6px; line-height:1;
+    position:relative; z-index:1; padding:13px 20px; border-radius:12px;
+  }
+  nav a:hover{color:var(--ink);}
+  nav a::before{
+    content:""; position:absolute; inset:0; border-radius:12px; background:var(--paper-soft);
+    opacity:0; transform:scale(0.9); transition:opacity .25s ease, transform .25s ease; z-index:-1;
+  }
+  nav a:hover::before, nav a:focus-visible::before{ opacity:1; transform:scale(1); }
+  .nav-cta{
+    font-size:14px; background:var(--ink); color:var(--paper); text-decoration:none;
+    padding:11px 22px; border-radius:100px; transition:background .2s;
+  }
+  .nav-cta:hover{background:var(--accent);}
+
+  /* mega menu */
+  nav li{position:relative;}
+  .has-mega{cursor:pointer;}
+  .has-mega svg{width:10px; height:10px; transition:transform .2s;}
+  nav li:hover .has-mega svg, nav li:focus-within .has-mega svg{transform:rotate(180deg);}
+  .mega-menu{
+    position:fixed; left:0; right:0; top:104px;
+    background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    box-shadow:0 40px 60px -40px rgba(36,31,26,0.15);
+    opacity:0; visibility:hidden; transform:translateY(-8px);
+    transition:opacity .25s ease, transform .25s ease, visibility .25s;
+    z-index:40;
+  }
+  nav li:hover .mega-menu, nav li:focus-within .mega-menu{
+    opacity:1; visibility:visible; transform:translateY(0);
+  }
+  .mega-inner{
+    max-width:1180px; margin:0 auto; padding:48px 40px;
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:36px;
+  }
+  .mega-item{ text-decoration:none; display:block; padding-right:20px;}
+  .mega-item .mega-eyebrow{ font-size:11px; letter-spacing:0.1em; color:var(--ink-soft); text-transform:uppercase; margin-bottom:10px;}
+  .mega-item h4{
+    font-family:'Fraunces', serif; font-weight:500; font-size:21px; margin:0 0 10px; color:var(--ink);
+    transition:color .2s;
+  }
+  .mega-item:hover h4{color:var(--accent);}
+  .mega-item p{ font-size:13.5px; line-height:1.55; color:var(--ink-soft); margin:0 0 14px;}
+  .mega-item .mega-arrow{ font-size:13px; color:var(--ink); border-bottom:1px solid var(--line);}
+  .mega-item:hover .mega-arrow{border-color:var(--ink);}
+  @media (max-width:900px){ .mega-menu{display:none;} }
+
+  /* gallery cta button on each service */
+  .gallery-btn{
+    display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+    font-size:14px; color:var(--ink); background:var(--paper-soft); border-radius:100px;
+    padding:12px 20px 12px 22px; margin-top:6px; transition:background .2s, transform .2s;
+  }
+  .gallery-btn:hover{ background:var(--accent-soft); transform:translateX(2px); }
+  .gallery-btn svg{width:14px; height:14px;}
+
+  /* bespoke CTA strip */
+  .bespoke-strip{
+    margin-top:48px;
+    border:1px solid var(--line); border-radius:28px; background:var(--paper-soft);
+    padding:32px 40px; display:flex; align-items:center; justify-content:space-between; gap:32px; flex-wrap:wrap;
+  }
+  .bespoke-mark{ flex:none; width:52px; height:52px; }
+  .jewel-line{
+    stroke-dasharray:1; stroke-dashoffset:1;
+    animation:jewelDraw 3.6s ease-in-out infinite;
+  }
+  .jewel-2{ animation-delay:0.25s; }
+  .jewel-3{ animation-delay:0.5s; }
+  @keyframes jewelDraw{
+    0%{ stroke-dashoffset:1; }
+    40%{ stroke-dashoffset:0; }
+    75%{ stroke-dashoffset:0; }
+    100%{ stroke-dashoffset:-1; }
+  }
+  @media (prefers-reduced-motion: reduce){ .jewel-line{ animation:none; stroke-dashoffset:0; } }
+  .bespoke-copy{ flex:1; min-width:260px; }
+  .bespoke-copy h3{
+    font-family:'Fraunces', serif; font-weight:500; font-size:clamp(19px,2.2vw,24px);
+    margin:0 0 6px; letter-spacing:-0.01em;
+  }
+  .bespoke-copy p{ font-size:14.5px; color:var(--ink-soft); margin:0; max-width:480px;}
+  @media (max-width:700px){ .bespoke-strip{padding:28px 24px; flex-direction:column; text-align:center;} .bespoke-copy p{margin:0 auto;} }
+
+  /* hero */
+  .hero{ position:relative; padding:180px 0 120px; overflow:hidden;}
+  .hero-inner{ max-width:760px; position:relative; z-index:2; }
+  .hero .eyebrow{margin-bottom:26px; display:flex; align-items:center; gap:10px;}
+  .hero .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);}
+  h1.headline{
+    font-family:'Fraunces', serif; font-weight:500; font-size:clamp(42px,7vw,84px);
+    line-height:1.03; letter-spacing:-0.015em; margin:0 0 30px;
+  }
+  .hero p.sub{
+    font-size:19px; line-height:1.65; color:var(--ink-soft); max-width:480px; margin:0 0 40px;
+  }
+  .hero-actions{display:flex; gap:20px; align-items:center; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--ink); color:var(--paper); text-decoration:none; border-radius:100px;
+    font-size:15px; padding:16px 30px; display:inline-flex; align-items:center; gap:10px; transition:background .2s, transform .2s;
+  }
+  .btn-primary:hover{background:var(--accent); transform:translateY(-1px);}
+  .btn-ghost{
+    text-decoration:none; font-size:15px; color:var(--ink); border-bottom:1px solid var(--ink);
+    padding-bottom:3px; transition:opacity .2s;
+  }
+  .btn-ghost:hover{opacity:0.6;}
+
+  /* soft render blob, decorative */
+  .render-orb{
+    position:absolute; top:60px; right:-140px; width:640px; height:640px; border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, #ffffff 0%, #e7ead9 28%, #c9d2b6 52%, #8fa27c 76%, #4b5c40 100%);
+    filter:blur(2px); opacity:0.9;
+    animation:float 9s ease-in-out infinite;
+  }
+  @keyframes float{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-22px);} }
+  @media (prefers-reduced-motion: reduce){ .render-orb{animation:none;} }
+  @media (max-width:900px){ .render-orb{width:360px; height:360px; right:-120px; top:120px; opacity:0.55;} }
+
+  /* giant icon watermark behind hero copy, clipped by hero's bottom edge */
+  .hero-icon-giant{
+    position:absolute; z-index:1; left:16%; bottom:-160px;
+    width:clamp(340px, 36vw, 560px); height:clamp(340px, 36vw, 560px);
+    opacity:0.16; pointer-events:none; user-select:none;
+    animation:heroIconFloat 8s ease-in-out infinite;
+  }
+  .hero-icon-giant img{ width:100%; height:100%; display:block; }
+  @keyframes heroIconFloat{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-20px);} }
+  @media (prefers-reduced-motion: reduce){ .hero-icon-giant{ animation:none; } }
+  @media (max-width:900px){ .hero-icon-giant{ display:none; } }
+
+  /* section shell */
+  section{padding:64px 0;}
+  .section-head{ max-width:640px; margin:0 auto 40px; text-align:center; }
+  .section-head .eyebrow{ justify-content:center; display:flex; margin-bottom:16px; }
+  .section-title{
+    font-family:'Fraunces', serif; font-weight:500; font-size:clamp(32px,4vw,50px);
+    letter-spacing:-0.01em; margin:0;
+  }
+  .section-title em{font-style:italic; font-weight:400;}
+  .section-lede{ color:var(--ink-soft); font-size:17px; line-height:1.6; margin-top:18px;}
+
+  /* about */
+  #about{background:var(--paper-soft);}
+  .about-grid{display:grid; grid-template-columns:0.7fr 1.3fr; gap:60px; align-items:stretch;}
+  .about-visual{
+    width:100%; height:100%; min-height:100%; border-radius:24px; position:relative; overflow:hidden;
+    background:linear-gradient(155deg,#efe9dc 0%, #dfe3d2 45%, #b9c2a5 75%, #6c7e5c 100%);
+    box-shadow:var(--card-shadow);
+    transition:transform .35s ease;
+    cursor:default;
+  }
+  .about-visual:hover{ transform:scale(1.035); }
+  .about-text{ display:flex; flex-direction:column; }
+  .about-text p{ font-size:17px; line-height:1.65; color:var(--ink-soft); margin:0 0 16px;}
+  .about-text p strong{color:var(--ink); font-weight:500;}
+  .about-tags{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+  .pill{
+    font-size:13px; padding:9px 16px; border-radius:100px; border:1px solid var(--line); color:var(--ink-soft);
+  }
+
+  .stats-grid{
+    margin-top:26px; padding-top:22px; border-top:1px solid var(--line);
+    display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
+  }
+  .stat{
+    background:var(--ink); border-radius:16px; padding:16px 22px;
+    transition:transform .25s ease; cursor:default; min-width:150px;
+  }
+  .stat:hover{ transform:scale(1.08); }
+  .stat-num{
+    font-family:'Fraunces', serif; font-weight:500; font-size:clamp(22px,2.4vw,28px);
+    color:var(--accent-soft); line-height:1; margin-bottom:6px;
+  }
+  .stat-label{ font-size:11.5px; color:rgba(250,247,242,0.68); line-height:1.35; }
+
+  /* services — tab bar */
+  .service-tabs{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:24px 0 0; padding-bottom:20px; border-bottom:1px solid var(--line);
+  }
+  .tab-btn{
+    font-family:'Inter', sans-serif; font-size:14.5px; font-weight:500; color:var(--ink-soft);
+    background:var(--paper-soft); border:1px solid transparent; border-radius:100px;
+    padding:14px 24px; cursor:pointer; transition:background .2s, color .2s, border-color .2s;
+  }
+  .tab-btn:hover{ color:var(--ink); }
+  .tab-btn.active{ background:var(--ink); color:var(--paper); }
+  @media (max-width:700px){ .service-tabs{ gap:8px; } .tab-btn{ padding:11px 18px; font-size:13.5px; } }
+
+  /* services — product showcase blocks */
+  .service-block{
+    display:none;
+    padding:32px 0 8px;
+    grid-template-columns:1.15fr 0.85fr; column-gap:52px; row-gap:28px;
+    align-items:center;
+    animation:panelFade .4s ease;
+  }
+  .service-block.active{ display:grid; }
+  @keyframes panelFade{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .service-block{ animation:none; } }
+  .service-copy{ max-width:none; margin-bottom:0; }
+  .service-copy .eyebrow{margin-bottom:10px;}
+  .service-copy h3{
+    font-family:'Fraunces', serif; font-weight:500; font-size:clamp(22px,2.6vw,32px);
+    margin:0 0 12px; letter-spacing:-0.01em;
+  }
+  .service-copy p{ font-size:15.5px; line-height:1.6; color:var(--ink-soft); margin:0 0 16px; max-width:480px;}
+  .service-hero{
+    aspect-ratio:5/4; border-radius:28px; box-shadow:var(--card-shadow);
+    transition:transform .35s ease; cursor:default;
+    background-size:cover; background-position:center;
+  }
+  .service-hero:hover{ transform:scale(1.035); }
+  .gallery-btn-wrap{ margin-top:16px; }
+  @media (max-width:900px){
+    .service-block.active{ grid-template-columns:1fr; row-gap:24px; align-items:start; }
+    .service-hero{ aspect-ratio:16/9; }
+  }
+  .service-list{list-style:none; margin:0 0 18px; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .service-list li{ font-size:14px; color:var(--ink); display:flex; align-items:center; gap:10px;}
+  .service-list li::before{content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;}
+  .service-link{
+    font-size:15px; text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:3px; display:inline-block;
+    transition:opacity .2s;
+  }
+  .service-link:hover{opacity:0.6;}
+
+  /* how it works — compact horizontal process */
+  .process-section{ padding:48px 0 56px; }
+  .process-row{
+    position:relative; display:grid; grid-template-columns:repeat(4, 1fr); gap:28px;
+    margin:36px 0 32px;
+  }
+  .step-visual{
+    width:100%; max-width:132px; aspect-ratio:3/4; margin:0 auto 16px;
+    border-radius:16px; background:var(--paper-soft); overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .step-visual svg{ width:62%; height:62%; overflow:visible; }
+  .cube-spin{ width:62%; height:62%; }
+  .cube-spin svg{ width:100%; height:100%; }
+  .step-visual{ perspective:300px; }
+  .cube-spin{ transform-style:preserve-3d; animation:cubeSpin 7s linear infinite; }
+  @keyframes cubeSpin{ from{ transform:rotateY(0deg); } to{ transform:rotateY(360deg); } }
+
+  .ping-ring{ transform-origin:78px 30px; animation:pingRing 2s ease-out infinite; }
+  @keyframes pingRing{ 0%{ r:4; opacity:0.85; } 100%{ r:17; opacity:0; } }
+
+  .magnifier{ animation:magnifierScan 3.6s ease-in-out infinite; }
+  @keyframes magnifierScan{
+    0%, 100%{ transform:translate(35px,35px); }
+    25%{ transform:translate(35px,50px); }
+    50%{ transform:translate(35px,65px); }
+    75%{ transform:translate(60px,50px); }
+  }
+
+  .check-pop{ transform-origin:50px 22px; animation:checkPop 3.2s ease-in-out infinite; }
+  @keyframes checkPop{
+    0%, 18%{ transform:scale(0); opacity:0; }
+    35%{ transform:scale(1.15); opacity:1; }
+    46%{ transform:scale(1); }
+    82%{ transform:scale(1); opacity:1; }
+    100%{ transform:scale(0); opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .cube-spin, .ping-ring, .magnifier, .check-pop{ animation:none; }
+  }
+
+  .step-num{
+    position:relative; z-index:1; width:44px; height:44px; border-radius:50%;
+    background:var(--paper); border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-weight:500; font-size:15px; color:var(--accent); margin-bottom:14px;
+  }
+  .process-step h3{ font-family:'Fraunces', serif; font-weight:500; font-size:17px; margin:0 0 6px; letter-spacing:-0.005em; }
+  .process-step p{ font-size:13.5px; line-height:1.55; color:var(--ink-soft); margin:0; max-width:230px; }
+  .process-cta{
+    display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+    padding-top:24px; border-top:1px solid var(--line);
+  }
+  .process-cta p{ font-size:17px; margin:0; }
+  @media (max-width:900px){
+    .process-row{ grid-template-columns:1fr 1fr; row-gap:32px; }
+  }
+  @media (max-width:560px){
+    .process-row{ grid-template-columns:1fr; }
+  }
+
+  /* work gallery (grid + card styles live in gallery-lightbox.css) */
+  #work{background:var(--paper-soft);}
+  .thumb-grid.compact{ grid-template-columns:repeat(4, 1fr); gap:14px; }
+  @media (max-width:900px){ .thumb-grid.compact{ grid-template-columns:repeat(3, 1fr); } }
+  @media (max-width:560px){ .thumb-grid.compact{ grid-template-columns:1fr 1fr; } }
+
+  /* fit & approach */
+  .fit-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; }
+  .fit-col h3{ font-family:'Fraunces', serif; font-weight:500; font-size:20px; margin:0 0 12px; letter-spacing:-0.005em; }
+  .fit-col > p{ font-size:14px; color:var(--ink-soft); line-height:1.6; margin:0 0 18px; max-width:420px; }
+  .fit-tags{ display:flex; flex-wrap:wrap; gap:9px; }
+  .fit-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:13px; }
+  .fit-list li{ display:flex; gap:12px; align-items:flex-start; font-size:14px; color:var(--ink); line-height:1.5; }
+  .fit-list .check{
+    flex:none; width:19px; height:19px; border-radius:50%; background:var(--accent-soft);
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .fit-list .check svg{ width:10px; height:10px; }
+  @media (max-width:900px){ .fit-grid{ grid-template-columns:1fr; gap:32px; } }
+
+  /* contact */
+  .contact-grid{display:grid; grid-template-columns:1fr 0.75fr; gap:56px;}
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .field{margin-bottom:16px;}
+  .field label{ display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:6px;}
+  .field input, .field textarea, .field select{
+    width:100%; border:none; border-bottom:1px solid var(--line); background:transparent;
+    font-family:'Inter', sans-serif; font-size:15.5px; color:var(--ink); padding:9px 0; transition:border-color .2s;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{border-color:var(--accent); outline:none;}
+  .field textarea{resize:vertical; min-height:64px;}
+  .submit-row{display:flex; align-items:center; gap:18px; margin-top:6px;}
+  .submit-btn{
+    background:var(--ink); color:var(--paper); border:none; font-size:14.5px; padding:13px 26px; border-radius:100px;
+    cursor:pointer; font-family:'Inter', sans-serif; transition:background .2s;
+  }
+  .submit-btn:hover{background:var(--accent);}
+  .form-note{font-size:12.5px; color:var(--ink-soft);}
+  .contact-side{ background:var(--paper-soft); border-radius:24px; padding:28px 32px; }
+  .contact-line{ display:flex; justify-content:space-between; padding:13px 0; border-bottom:1px solid var(--line); font-size:14px;}
+  .contact-line:first-child{padding-top:0;}
+  .contact-line .k{color:var(--ink-soft); font-size:12.5px;}
+  .contact-line a{text-decoration:none; border-bottom:1px solid var(--line);}
+  .contact-line a:hover{border-color:var(--ink);}
+  .avail{margin-top:18px; display:flex; align-items:center; gap:10px; font-size:13.5px;}
+  .avail::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--accent); flex:none;}
+  @media (max-width:560px){ .field-row{ grid-template-columns:1fr; gap:0; } }
+
+  footer{padding:32px 0; border-top:1px solid var(--line);}
+  .footer-row{display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--ink-soft); flex-wrap:wrap; gap:16px;}
+  .footer-row a{text-decoration:none;}
+  .footer-row a:hover{color:var(--ink);}
+  .footer-links{display:flex; gap:26px;}
+
+  @media (max-width:900px){
+    nav ul{display:none;}
+    .about-grid, .contact-grid{grid-template-columns:1fr; gap:44px;}
+    .about-visual{ aspect-ratio:16/10; height:auto; }
+    .contact-side{padding:32px;}
+  }
+</style>
 </head>
-
 <body>
 
-    <header>
-        <h1>Your Name</h1>
-        <p>3D Designer | Event Designer | Creative Professional</p>
-    </header>
+<header>
+  <div class="wrap nav-row">
+    <a href="#" class="brand"><img src="images/logo/rocketmoon-logo.svg" alt="Rocket Moon" class="brand-logo"></a>
+    <nav>
+      <ul>
+        <li><a href="#about">What We Do</a></li>
+        <li>
+          <a href="#services" class="has-mega">Services
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </a>
+          <div class="mega-menu">
+            <div class="mega-inner">
+              <a href="gallery-event-design.html" class="mega-item">
+                <div class="mega-eyebrow">Gallery</div>
+                <h4>3D Event Design</h4>
+                <p>Booths, arches, backdrops & stage structures.</p>
+                <span class="mega-arrow">View gallery →</span>
+              </a>
+              <a href="gallery-hardsurface.html" class="mega-item">
+                <div class="mega-eyebrow">Gallery</div>
+                <h4>3D Hardsurface Modelling</h4>
+                <p>Game-ready weapons, vehicles & environment kits.</p>
+                <span class="mega-arrow">View gallery →</span>
+              </a>
+              <a href="gallery-motion-graphics.html" class="mega-item">
+                <div class="mega-eyebrow">Gallery</div>
+                <h4>Motion Graphics</h4>
+                <p>Animated infographics, teasers & vector animation.</p>
+                <span class="mega-arrow">View gallery →</span>
+              </a>
+              <a href="gallery-content-creation.html" class="mega-item">
+                <div class="mega-eyebrow">Gallery</div>
+                <h4>Content Creation</h4>
+                <p>Brand, key art & social content.</p>
+                <span class="mega-arrow">View gallery →</span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="#contact" class="nav-cta">Start a project</a>
+  </div>
+</header>
 
-    <main>
+<section class="hero">
+  <div class="render-orb"></div>
+  <div class="hero-icon-giant" aria-hidden="true">
+    <img src="images/icon/rocketmoon-icon.svg" alt="">
+  </div>
+  <div class="wrap">
+    <div class="hero-inner">
+      <h1 class="headline">Ideas, <span class="serif-i">modeled</span><br>into things you<br>can build on.</h1>
+      <p class="sub">We design and produce the 3D and motion work behind live events, games, and brands — from stage structures to game-ready assets to the graphics that carry them.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Start a project →</a>
+        <a href="#work" class="btn-ghost">View the work</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <section>
-            <h2>About Me</h2>
-            <p>
-                Welcome to my portfolio. I'm a designer specialising in...
-            </p>
-        </section>
+<section id="about">
+  <div class="wrap about-grid reveal">
+    <div class="about-visual"></div>
+    <div class="about-text">
+      <div class="eyebrow" style="margin-bottom:14px;">What We Do</div>
+      <p><strong>We work at the point where an idea becomes a thing</strong> — a structure that has to stand, a model that has to run in an engine, a scene that has to read in three seconds.</p>
+      <p>Our practice spans technical 3D design across events, games, and brand work, which means every project gets looked at the same way: what does this need to do, and what does it take to actually get there.</p>
+      <div class="about-tags">
+        <span class="pill">Event Design</span>
+        <span class="pill">Hardsurface Modelling</span>
+        <span class="pill">Motion Graphics</span>
+        <span class="pill">Content Creation</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-num">40<span class="serif-i">+</span></div>
+          <div class="stat-label">Commercial projects</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">5<span class="serif-i">+</span></div>
+          <div class="stat-label">Years, multi-industry</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <section>
-            <h2>My Work</h2>
-            <p>
-                Here are some of my selected projects.
-            </p>
-        </section>
+<section id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Services</div>
+      <h2 class="section-title">Ways to <em>work with us.</em></h2>
+      <p class="section-lede">Each one shown here the way we'd walk you through it in a first call.</p>
+    </div>
 
-        <section>
-            <h2>Contact</h2>
-            <p>
-                Email: your@email.com
-            </p>
-        </section>
+    <div class="service-tabs reveal" role="tablist">
+      <button class="tab-btn active" data-tab="event-design" role="tab" aria-selected="true">3D Event Design</button>
+      <button class="tab-btn" data-tab="hardsurface" role="tab" aria-selected="false">Hardsurface Modelling</button>
+      <button class="tab-btn" data-tab="motion" role="tab" aria-selected="false">Motion Graphics</button>
+      <button class="tab-btn" data-tab="content" role="tab" aria-selected="false">Content Creation</button>
+      <button class="tab-btn" data-tab="consultation" role="tab" aria-selected="false">Consultation</button>
+    </div>
 
-    </main>
+    <div class="service-block active reveal" data-panel="event-design">
+      <div class="service-copy">
+        <div class="eyebrow">3D Event Design</div>
+        <h3>Structures people walk through.</h3>
+        <p>Booth design, event planning support, and structural design for arches, backdrops, and stage builds — modeled to scale and handed off fabrication-ready.</p>
+        <ul class="service-list">
+          <li>Booth & activation design</li>
+          <li>Arches, backdrops & stage structures</li>
+          <li>Event planning collaboration</li>
+        </ul>
+        <a href="#contact" class="service-link">Discuss an event design →</a>
+        <div class="gallery-btn-wrap">
+          <a href="gallery-event-design.html" class="gallery-btn">View Event Design gallery
+            <svg viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H4M11 3V10" stroke="currentColor" stroke-width="1.4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="service-hero frame-sequence" data-frames='[]' data-fps="12" style="background:radial-gradient(circle at 40% 32%, #fff 0%, #eaeedb 22%, #aebd8f 55%, #506544 85%, #33421f 100%);"></div>
+    </div>
 
+    <div class="service-block" data-panel="hardsurface">
+      <div class="service-copy">
+        <div class="eyebrow">3D Hardsurface Modelling</div>
+        <h3>Assets built for the engine.</h3>
+        <p>Game-ready hardsurface modelling — weapons, vehicles, props, and environment kits — built to spec for poly budget, topology, and a clean handoff.</p>
+        <ul class="service-list">
+          <li>Game-ready weapons & props</li>
+          <li>Vehicles & environment kits</li>
+          <li>Retopology & optimization</li>
+        </ul>
+        <a href="#contact" class="service-link">Discuss a model →</a>
+        <div class="gallery-btn-wrap">
+          <a href="gallery-hardsurface.html" class="gallery-btn">View Hardsurface gallery
+            <svg viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H4M11 3V10" stroke="currentColor" stroke-width="1.4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="service-hero frame-sequence" data-frames='[]' data-fps="12" style="background:radial-gradient(circle at 55% 32%, #fff 0%, #ede6d5 22%, #c1b28c 55%, #6b5b3c 85%, #40331d 100%);"></div>
+    </div>
+
+    <div class="service-block" data-panel="motion">
+      <div class="service-copy">
+        <div class="eyebrow">Motion Graphics</div>
+        <h3>Motion that explains, teases, and sells.</h3>
+        <p>Animated infographics, edutainment content, and advertisement-style motion — think a debut reel for an upcoming event, a teaser, or a vector animation built to explain something fast.</p>
+        <ul class="service-list">
+          <li>Animated infographics</li>
+          <li>Event teasers & debut reels</li>
+          <li>Vector-based animation</li>
+        </ul>
+        <a href="#contact" class="service-link">Discuss a motion piece →</a>
+        <div class="gallery-btn-wrap">
+          <a href="gallery-motion-graphics.html" class="gallery-btn">View Motion Graphics gallery
+            <svg viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H4M11 3V10" stroke="currentColor" stroke-width="1.4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="service-hero frame-sequence" data-frames='[]' data-fps="12" style="background:radial-gradient(circle at 45% 30%, #fff 0%, #e6ecdb 22%, #a3b98a 55%, #4a6339 85%, #2c3d1f 100%);"></div>
+    </div>
+
+    <div class="service-block" data-panel="content">
+      <div class="service-copy">
+        <div class="eyebrow">Content Creation</div>
+        <h3>Brand and social, handled.</h3>
+        <p>Graphic design and content for brand and social — key art, campaign assets, and the everyday content that keeps a brand looking considered.</p>
+        <ul class="service-list">
+          <li>Brand & key art</li>
+          <li>Social content</li>
+          <li>Campaign assets</li>
+        </ul>
+        <a href="#contact" class="service-link">Discuss content →</a>
+        <div class="gallery-btn-wrap">
+          <a href="gallery-content-creation.html" class="gallery-btn">View Content Creation gallery
+            <svg viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H4M11 3V10" stroke="currentColor" stroke-width="1.4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="service-hero frame-sequence" data-frames='[]' data-fps="12" style="background:radial-gradient(circle at 50% 30%, #fff 0%, #ece6d5 22%, #bfae86 55%, #6d5c3d 85%, #40331e 100%);"></div>
+    </div>
+
+    <div class="service-block" data-panel="consultation">
+      <div class="service-copy">
+        <div class="eyebrow">Consultation</div>
+        <h3>A second set of eyes, before it's built.</h3>
+        <p>Advisory support on technical 3D pipelines and feasibility — reviewing a build before it's fabricated, or a model before it hits the engine.</p>
+        <ul class="service-list">
+          <li>Pipeline & feasibility review</li>
+          <li>Pre-production consulting</li>
+        </ul>
+        <a href="#contact" class="service-link">Book a consult →</a>
+      </div>
+      <div class="service-hero frame-sequence" data-frames='[]' data-fps="12" style="background:radial-gradient(circle at 48% 32%, #fff 0%, #e9ede0 22%, #a9b98d 55%, #566b42 85%, #303f24 100%);"></div>
+    </div>
+
+    <div class="bespoke-strip reveal">
+      <svg class="bespoke-mark" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="30" stroke="var(--accent)" stroke-width="1.4" pathLength="1" class="jewel-line jewel-1"/>
+        <path d="M32 14 L46 24 L46 40 L32 50 L18 40 L18 24 Z" stroke="var(--accent)" stroke-width="1.4" pathLength="1" class="jewel-line jewel-2"/>
+        <path d="M32 14 V50 M18 24 L46 40 M46 24 L18 40" stroke="var(--accent)" stroke-width="1" opacity="0.5" pathLength="1" class="jewel-line jewel-3"/>
+      </svg>
+      <div class="bespoke-copy">
+        <h3>Need something else tailored for you?</h3>
+        <p>If your project doesn't fit neatly into one of these, that's alright — most don't. Tell us what you're working on and we'll figure out the shape of it together.</p>
+      </div>
+      <a href="#contact" class="btn-primary">Let's talk →</a>
+    </div>
+  </div>
+</section>
+
+<section id="process" class="process-section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">How It Works</div>
+      <h2 class="section-title">From first email to <em>handover.</em></h2>
+    </div>
+
+    <div class="process-row reveal">
+      <div class="process-step">
+        <div class="step-visual">
+          <svg viewBox="0 0 100 100" fill="none">
+            <rect x="20" y="30" width="60" height="42" rx="4" stroke="var(--accent)" stroke-width="2"/>
+            <path d="M22 32 L50 55 L78 32" stroke="var(--accent)" stroke-width="2"/>
+            <circle class="ping-dot" cx="78" cy="30" r="4" fill="var(--accent)"/>
+            <circle class="ping-ring" cx="78" cy="30" r="4" stroke="var(--accent)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="step-num">01</div>
+        <h3>Get in touch</h3>
+        <p>Email or call, and we'll walk through the rough project details — enough for a clear estimate on deliverables, timeline, and cost.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-visual">
+          <div class="cube-spin">
+            <svg viewBox="0 0 100 100" fill="none">
+              <polygon points="50,18 76,34 76,66 50,82 24,66 24,34" stroke="var(--accent)" stroke-width="2"/>
+              <polyline points="24,34 50,50 76,34" stroke="var(--accent)" stroke-width="1.5" opacity="0.6"/>
+              <line x1="50" y1="50" x2="50" y2="82" stroke="var(--accent)" stroke-width="1.5" opacity="0.6"/>
+            </svg>
+          </div>
+        </div>
+        <div class="step-num">02</div>
+        <h3>Proof of concept</h3>
+        <p>Initial blockouts to react to — this is where further discussion steers the work in the right direction.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-visual">
+          <svg viewBox="0 0 100 100" fill="none">
+            <line x1="30" y1="35" x2="70" y2="35" stroke="var(--line)" stroke-width="3"/>
+            <line x1="30" y1="50" x2="70" y2="50" stroke="var(--line)" stroke-width="3"/>
+            <line x1="30" y1="65" x2="70" y2="65" stroke="var(--line)" stroke-width="3"/>
+            <g class="magnifier">
+              <circle cx="0" cy="0" r="11" stroke="var(--accent)" stroke-width="2.5"/>
+              <line x1="8" y1="8" x2="16" y2="16" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+        <div class="step-num">03</div>
+        <h3>Pre-delivery review</h3>
+        <p>A final inspection from both sides before anything is called finished.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-visual">
+          <svg viewBox="0 0 100 100" fill="none">
+            <rect x="25" y="35" width="50" height="38" rx="4" stroke="var(--accent)" stroke-width="2"/>
+            <path d="M25 40 L50 55 L75 40" stroke="var(--accent)" stroke-width="2"/>
+            <g class="check-pop">
+              <circle cx="50" cy="22" r="12" fill="var(--accent)"/>
+              <path d="M44 22 L48 27 L57 17" stroke="var(--paper)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </svg>
+        </div>
+        <div class="step-num">04</div>
+        <h3>Handover</h3>
+        <p>Files delivered, project closed.</p>
+      </div>
+    </div>
+
+    <div class="process-cta reveal">
+      <p class="serif-i">Ready to talk specifics?</p>
+      <a href="#contact" class="btn-primary">Schedule a call →</a>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Selected Work</div>
+      <h2 class="section-title">A few recent <em>pieces.</em></h2>
+      <p class="section-lede">A cross-section of recent projects — click any piece for the full story.</p>
+    </div>
+    <div class="thumb-grid compact reveal" id="workGrid"></div>
+  </div>
+</section>
+
+<section id="fit" style="background:var(--paper-soft);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Fit & Approach</div>
+      <h2 class="section-title">Built for teams <em>like yours.</em></h2>
+    </div>
+
+    <div class="fit-grid reveal">
+      <div class="fit-col">
+        <h3>Who we work with</h3>
+        <p>Mostly smaller, faster-moving teams — where a technical 3D partner needs to plug in directly rather than through layers of process.</p>
+        <div class="fit-tags">
+          <span class="pill">Small & medium businesses</span>
+          <span class="pill">Startups</span>
+          <span class="pill">Freelancers & agencies</span>
+          <span class="pill">Commission-based hobbyist orders</span>
+        </div>
+      </div>
+      <div class="fit-col">
+        <h3>Why choose us</h3>
+        <ul class="fit-list">
+          <li>
+            <span class="check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            5+ years of experience across multiple industries
+          </li>
+          <li>
+            <span class="check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            A wide range of technical services, so it's almost one-stop
+          </li>
+          <li>
+            <span class="check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            AI-assisted workflow to boost efficiency without cutting quality
+          </li>
+          <li>
+            <span class="check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Hands-on guidance on design & storytelling, not just execution
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-grid reveal">
+    <div>
+      <div class="eyebrow" style="margin-bottom:10px;">Contact</div>
+      <h2 class="section-title" style="text-align:left; margin-bottom:20px;">Let's start<br><em>something.</em></h2>
+      <form id="contactForm">
+        <div class="field-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="type">Project type</label>
+          <select id="type">
+            <option>3D Event Design</option>
+            <option>3D Hardsurface Modelling</option>
+            <option>Motion Graphics</option>
+            <option>Content Creation</option>
+            <option>Consultation</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="message">Project details</label>
+          <textarea id="message" required placeholder="Scope, timeline, references..."></textarea>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="submit-btn">Send inquiry</button>
+          <span class="form-note">Opens your email client.</span>
+        </div>
+      </form>
+    </div>
+    <div class="contact-side">
+      <div class="contact-line"><span class="k">Email</span><span>Stay Tuned.</span></div>
+      <div class="contact-line"><span class="k">Instagram</span><span>Stay Tuned.</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="footer-brand">
+      <img src="images/icon/rocketmoon-icon.svg" alt="" class="footer-icon">
+      <span class="footer-tagline">Rocket Moon Creative Solutions</span>
+    </div>
+    <div class="footer-links">
+      <a href="#about">What We Do</a><a href="#services">Services</a><a href="#work">Work</a><a href="about.html">About Us</a><a href="#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/projects-data.js"></script>
+<script src="js/gallery-lightbox.js"></script>
+<script src="js/frame-sequence.js"></script>
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const type = document.getElementById('type').value;
+    const message = document.getElementById('message').value;
+    const subject = encodeURIComponent(`Project inquiry — ${type}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nProject type: ${type}\n\n${message}`);
+    window.location.href = `mailto:hello@yourdomain.com?subject=${subject}&body=${body}`;
+  });
+
+  renderThumbGrid(document.getElementById('workGrid'), featuredProjects(6));
+
+  // services tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b === btn);
+        b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+      });
+      document.querySelectorAll('.service-block').forEach(panel => {
+        panel.classList.toggle('active', panel.getAttribute('data-panel') === target);
+      });
+    });
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 </body>
 </html>
