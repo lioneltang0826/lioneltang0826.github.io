@@ -33,17 +33,5 @@
 */
 
 const PROJECTS = [
-{
-  slug: "directional-signage",
-  title: "Directional Signage",
-  category: "3D Event Design",
-  thumbnail: "images/3d-event-design-gallery/010001.png",
-  images: [
-      "images/3d-event-design-gallery/010001.png"
-  ],
-  video: null,
-  brief: "Add a project brief here.",
-  featured: true,
-  placeholderGradient: null
-},
+
 ];

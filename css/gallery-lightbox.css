@@ -31,7 +31,13 @@
 .thumb-info h3{ font-family:'Fraunces', serif; font-weight:500; font-size:21px; color:var(--paper); margin:0; letter-spacing:-0.005em; }
 
 @media (max-width:900px){ .thumb-grid{ grid-template-columns:1fr 1fr; } }
-@media (max-width:560px){ .thumb-grid{ grid-template-columns:1fr; } }
+@media (max-width:560px){
+  .thumb-grid{ grid-template-columns:1fr 1fr; gap:14px; }
+  .thumb-overlay{ padding:16px; opacity:1; background:rgba(36,31,26,0.5); }
+  .thumb-info{ transform:none; opacity:1; }
+  .thumb-info h3{ font-size:15px; }
+  .thumb-info .cat{ font-size:9.5px; }
+}
 
 /* slideshow modal */
 .modal-scrim{
