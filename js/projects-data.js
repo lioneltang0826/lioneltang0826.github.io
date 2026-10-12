@@ -67,7 +67,7 @@ const PROJECTS = [
   ],
   video: null,
   brief: "Visualization of venue setup @ Auto Bavaria 2024",
-  featured: false,
+  featured: true,
   placeholderGradient: null
 },
 
