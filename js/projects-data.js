@@ -71,4 +71,20 @@ const PROJECTS = [
   placeholderGradient: null
 },
 
+{
+  slug: "a320-throttle",
+  title: "A320 Throttle",
+  category: "3D Hardsurface Modelling",
+  thumbnail: "images/3d-hardsurface-gallery/2023-a320throttle-04.webp",
+  images: [
+      "images/3d-hardsurface-gallery/2023-a320throttle-01.webp",
+      "images/3d-hardsurface-gallery/2023-a320throttle-02.webp",
+      "images/3d-hardsurface-gallery/2023-a320throttle-03.webp"
+  ],
+  video: null,
+  brief: "A main interactive part from an educational VR pilot training video game.",
+  featured: true,
+  placeholderGradient: null
+},
+
 ];
