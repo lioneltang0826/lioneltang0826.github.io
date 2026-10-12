@@ -43,11 +43,6 @@ const PROJECTS = [
 	"images/3d-event-design-gallery/2024-swiftfestival-01.png",
       "images/3d-event-design-gallery/2024-swiftfestival-02.png",
       "images/3d-event-design-gallery/2024-swiftfestival-03.png",
-      "images/3d-event-design-gallery/2024-swiftfestival-04.png",
-      "images/3d-event-design-gallery/2024-swiftfestival-05.png",
-      "images/3d-event-design-gallery/2024-swiftfestival-06.png",
-      "images/3d-event-design-gallery/2024-swiftfestival-07.png",
-      "images/3d-event-design-gallery/2024-swiftfestival-08.png"
   ],
   video: null,
   brief: "Overall venue, environment and stage design for Swift Festival 2024 @ Sentul Depot, Setapak",
