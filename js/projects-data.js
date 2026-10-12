@@ -38,11 +38,11 @@ const PROJECTS = [
   slug: "swift-festival-2024",
   title: "Swift Festival 2024",
   category: "3D Event Design",
-  thumbnail: "images/3d-event-design-gallery/2024-swiftfestival-01.png",
+  thumbnail: "images/3d-event-design-gallery/2024-swiftfestival-01.webp",
   images: [
-	"images/3d-event-design-gallery/2024-swiftfestival-01.png",
-      "images/3d-event-design-gallery/2024-swiftfestival-02.png",
-      "images/3d-event-design-gallery/2024-swiftfestival-03.png"
+      "images/3d-event-design-gallery/2024-swiftfestival-01.webp",
+      "images/3d-event-design-gallery/2024-swiftfestival-02.webp",
+      "images/3d-event-design-gallery/2024-swiftfestival-03.webp"
   ],
   video: null,
   brief: "Overall venue, environment and stage design for Swift Festival 2024 @ Sentul Depot, Setapak",
@@ -51,19 +51,19 @@ const PROJECTS = [
 },
 
 	{
-  slug: "2024-auto-bavaria",
-  title: "2024 Auto Bavaria",
+  slug: "auto-bavaria-2024",
+  title: "Auto Bavaria 2024",
   category: "3D Event Design",
-  thumbnail: "images/3d-event-design-gallery/2024-autobavaria-08.png",
+  thumbnail: "images/3d-event-design-gallery/2024-autobavaria-08.webp",
   images: [
-      "images/3d-event-design-gallery/2024-autobavaria-02.png",
-      "images/3d-event-design-gallery/2024-autobavaria-03.png",
-      "images/3d-event-design-gallery/2024-autobavaria-04.png",
-      "images/3d-event-design-gallery/2024-autobavaria-05.png",
-      "images/3d-event-design-gallery/2024-autobavaria-06.png",
-      "images/3d-event-design-gallery/2024-autobavaria-07.png",
-      "images/3d-event-design-gallery/2024-autobavaria-08.png",
-      "images/3d-event-design-gallery/2024-autobavaria-09.png"
+      "images/3d-event-design-gallery/2024-autobavaria-02.webp",
+      "images/3d-event-design-gallery/2024-autobavaria-03.webp",
+      "images/3d-event-design-gallery/2024-autobavaria-04.webp",
+      "images/3d-event-design-gallery/2024-autobavaria-05.webp",
+      "images/3d-event-design-gallery/2024-autobavaria-06.webp",
+      "images/3d-event-design-gallery/2024-autobavaria-07.webp",
+      "images/3d-event-design-gallery/2024-autobavaria-08.webp",
+      "images/3d-event-design-gallery/2024-autobavaria-09.webp"
   ],
   video: null,
   brief: "Visualization of venue setup @ Auto Bavaria 2024",
