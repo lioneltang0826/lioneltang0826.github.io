@@ -50,4 +50,25 @@ const PROJECTS = [
   placeholderGradient: null
 },
 
+	{
+  slug: "2024-auto-bavaria",
+  title: "2024 Auto Bavaria",
+  category: "3D Event Design",
+  thumbnail: "images/3d-event-design-gallery/2024-autobavaria-08.png",
+  images: [
+      "images/3d-event-design-gallery/2024-autobavaria-02.png",
+      "images/3d-event-design-gallery/2024-autobavaria-03.png",
+      "images/3d-event-design-gallery/2024-autobavaria-04.png",
+      "images/3d-event-design-gallery/2024-autobavaria-05.png",
+      "images/3d-event-design-gallery/2024-autobavaria-06.png",
+      "images/3d-event-design-gallery/2024-autobavaria-07.png",
+      "images/3d-event-design-gallery/2024-autobavaria-08.png",
+      "images/3d-event-design-gallery/2024-autobavaria-09.png"
+  ],
+  video: null,
+  brief: "Visualization of venue setup @ Auto Bavaria 2024",
+  featured: false,
+  placeholderGradient: null
+},
+
 ];
